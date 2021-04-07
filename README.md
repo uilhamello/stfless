@@ -41,10 +41,10 @@ Estrutura de Teste utilizando JEST
 
 ## O que falta adicionar para melhorar o projeto ( do que pode ser pensado até o momento)
 
-JWT para garantir segurança nas execuções das ações
+JWT para garantir segurança nas requisições das ações
 
 
-## Principal desavio ao candidato
+## Principal desafio ao candidato
 
 As requisições técnicas para desenvolver o projeto ainda não havia sido utilizadas por mim, o que precisou um pouco mais de tempo para estudá-las.
 

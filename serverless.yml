@@ -1,0 +1,84 @@
+service: employee-service
+
+frameworkVersion: "2"
+
+provider:
+  name: aws
+  profile: lambdaDev
+  runtime: nodejs12.x
+  stage: dev
+  region: sa-east-1
+  environment:
+    EMPLOYEE_TABLE: ${self:service}-${opt:stage, self:provider.stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
+
+resources:
+  Resources:
+    EmployeeDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "id"
+            AttributeType: "S"   
+        KeySchema:
+          -
+            AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: ${self:provider.environment.EMPLOYEE_TABLE}
+              
+functions:
+  allEmployee:
+    handler: services/api/employee/allEmployee.handler
+    memorySize: 512
+    description: Show all employee paging by 10 registers
+    events:
+      - httpApi:
+          path: /employee
+          method: get
+  getEmployee:
+    handler: services/api/employee/getEmployee.handler
+    memorySize: 512
+    description: Looks for a specific employee by Employee Id
+    events:
+      - httpApi:
+          path: /employee/{id}
+          method: get
+  addEmployee:
+    handler: services/api/employee/addEmployee.handler
+    memorySize: 512
+    description: Add a new employee
+    events:
+      - httpApi:
+          path: /employee/add
+          method: post
+  editEmployee:
+    handler: services/api/employee/editEmployee.handler
+    memorySize: 512
+    description: Edit a specific employee by employee id
+    events:
+      - httpApi:
+          path: /employee/edit
+          method: put
+  removeEmployee:
+    handler: services/api/employee/removeEmployee.handler
+    memorySize: 512
+    description: Remove a specific employee by employee id
+    events:
+      - httpApi:
+          path: /employee/delete/{id}
+          method: delete
+

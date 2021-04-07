@@ -1,6 +1,6 @@
 # stefaless
 
-Employee API using Lambda Nodejs DynamoDB Serverless Framework
+Employee API built with Lambda Nodejs DynamoDB Serverless Framework
 
 
 ## Modo de Instalação local
